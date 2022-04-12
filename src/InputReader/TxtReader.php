@@ -8,15 +8,15 @@ use App\Exceptions\IncorrectExtensionException;
 
 class TxtReader implements InputReaderInterface
 {
+    private Input $input;
+
     /**
      * @throws NotFileException
      * @throws IncorrectExtensionException
      */
-    public function __construct(
-        private Input $input
-    )
+    public function setInput(Input $input)
     {
-        
+        $this->input = $input;
     }
 
     public function readLines(): array

@@ -16,9 +16,10 @@ class SonarTest extends TestCase
      */
     public static function getNewSonarWithTestInput(string $path): Sonar
     {
-        $input = new TxtInput(__DIR__ . $path, 'txt');
-        $reader = new TxtReader($input);
-        return new Sonar($reader);
+        $testsonardata = new TxtInput(__DIR__ . $path, 'txt');
+        $testreader = new TxtReader();
+        $testreader->setInput($testsonardata);
+        return new Sonar($testreader);
     }
 
     public function testCanReturnCorrectInclineCountFromFile()
