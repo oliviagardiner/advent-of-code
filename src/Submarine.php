@@ -37,9 +37,10 @@ class Submarine
     {
         foreach ($this->course as $key => $line) {
             try {
-                $command = $this->extractCommand($line);
-                $command = $this->validateCommand($command);
-                $this->changePosition($command[0], $command[1]);
+                $extract = $this->extractCommand($line);
+                $extract = $this->validateCommand($extract);
+                list($command, $value) = $extract;
+                $this->changePosition($command, $value);
             } catch (InvalidCommandException|InvalidNavigationValueException $e) {
                 throw new FailedNavigationException($e->getMessage());
             }
