@@ -34,8 +34,6 @@ class Sonar
             } catch (NotEnoughDataPointsException $e) {
                 continue;
             }
-            //if ($key >= $count - 1) $data[] = $datapoint + $this->data[$key - 1] + $this->data[$key - 2];
-            //else continue;
         }
         $this->data = $data;
     }
