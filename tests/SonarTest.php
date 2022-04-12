@@ -10,24 +10,74 @@ use PHPUnit\Framework\TestCase;
 //./vendor/bin/phpunit tests
 class SonarTest extends TestCase
 {
-    private static Sonar $sonar;
-
     /**
      * @throws NotFileException
      * @throws IncorrectExtensionException
      */
-    public static function setUpBeforeClass(): void
+    public static function getNewSonarWithTestInput(string $path): Sonar
     {
-        $input = new TxtInput(__DIR__ . '\fixtures\day-1-testinput.txt', 'txt');
+        $input = new TxtInput(__DIR__ . $path, 'txt');
         $reader = new TxtReader($input);
-        self::$sonar = new Sonar($reader);
+        return new Sonar($reader);
     }
 
     public function testCanReturnCorrectInclineCountFromFile()
     {
+        $sonar = self::getNewSonarWithTestInput('\fixtures\day-1-testinput.txt');
         $this->assertEquals(
             7,
-            self::$sonar->countInclines()
+            $sonar->countInclines()
+        );
+    }
+
+    public function testCanReturnCorrectInclineCountFromFile2()
+    {
+        $sonar = self::getNewSonarWithTestInput('\fixtures\day-1-testinput-2.txt');
+        $this->assertEquals(
+            3,
+            $sonar->countInclines()
+        );
+    }
+
+    public function testCanMergeDatapointsByCount()
+    {
+        $sonar = self::getNewSonarWithTestInput('\fixtures\day-1-testinput.txt');
+        $sonar->mergeDatapointsByCount(3);
+        $reflectionClass = new ReflectionClass('App\Sonar');
+        $data = $reflectionClass->getProperty('data')->getValue($sonar);
+        $this->assertEquals(
+            [
+                607,
+                618,
+                618,
+                617,
+                647,
+                716,
+                769,
+                792
+            ],
+            $data
+        );
+    }
+
+    public function testCanReturnCorrectInclineCountAfterMerge()
+    {
+        $sonar = self::getNewSonarWithTestInput('\fixtures\day-1-testinput.txt');
+        $sonar->mergeDatapointsByCount(3);
+        $this->assertEquals(
+            5,
+            $sonar->countInclines()
+        );
+    }
+
+    public function testCanReturnCorrectInclineCountAfterMerge2()
+    {
+        $sonar = self::getNewSonarWithTestInput('\fixtures\day-1-testinput-2.txt');
+        $sonar->mergeDatapointsByCount(3); // 200, 160, 80, 100
+
+        $this->assertEquals(
+            1,
+            $sonar->countInclines()
         );
     }
 
@@ -37,8 +87,8 @@ class SonarTest extends TestCase
     public function testThrowsTypeErrorIfCurrentitemNotInteger()
     {
         $this->expectException(TypeError::class);
-
-        self::$sonar->setCurrentitem('foo');
+        $sonar = self::getNewSonarWithTestInput('\fixtures\day-1-testinput.txt');
+        $sonar->setCurrentitem('foo');
     }
 
     /**
@@ -47,30 +97,38 @@ class SonarTest extends TestCase
     public function testThrowsTypeErrorIfPreviousitemNotInteger()
     {
         $this->expectException(TypeError::class);
-
-        self::$sonar->setPreviousitem('bar');
+        $sonar = self::getNewSonarWithTestInput('\fixtures\day-1-testinput.txt');
+        $sonar->setPreviousitem('bar');
     }
 
     public function testIsInclineReturnsTrueIfCurrentIsGreater()
     {
-        self::$sonar->setCurrentitem(100);
-        self::$sonar->setPreviousitem(50);
-
-        $this->assertTrue(self::$sonar->isIncline());
+        $sonar = self::getNewSonarWithTestInput('\fixtures\day-1-testinput.txt');
+        $sonar->setCurrentitem(100);
+        $sonar->setPreviousitem(50);
+        $this->assertTrue($sonar->isIncline());
     }
 
     public function testIsInclineReturnsFalseIfPreviousIsGreater()
     {
-        self::$sonar->setCurrentitem(50);
-        self::$sonar->setPreviousitem(100);
+        $sonar = self::getNewSonarWithTestInput('\fixtures\day-1-testinput.txt');
+        $sonar->setCurrentitem(50);
+        $sonar->setPreviousitem(100);
+        $this->assertFalse($sonar->isIncline());
+    }
 
-        $this->assertFalse(self::$sonar->isIncline());
+    public function testIsInclineReturnsFalseIfItemsEqual()
+    {
+        $sonar = self::getNewSonarWithTestInput('\fixtures\day-1-testinput.txt');
+        $sonar->setCurrentitem(100);
+        $sonar->setPreviousitem(100);
+        $this->assertFalse($sonar->isIncline());
     }
 
     public function testIsInclineReturnsFalseIfPreviousNotSet()
     {
-        self::$sonar->setCurrentitem(100);
-
-        $this->assertFalse(self::$sonar->isIncline());
+        $sonar = self::getNewSonarWithTestInput('\fixtures\day-1-testinput.txt');
+        $sonar->setCurrentitem(100);
+        $this->assertFalse($sonar->isIncline());
     }
 }

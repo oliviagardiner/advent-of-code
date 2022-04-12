@@ -18,8 +18,16 @@ class TxtReader implements InputReaderInterface
     {
         
     }
+
     public function readLines(): array
     {
         return file($this->input->getPath());
+    }
+
+    public function mapLinesToInteger(): array
+    {
+        return array_map(function($item) {
+            return (int)$item;
+        }, $this->readLines());
     }
 }

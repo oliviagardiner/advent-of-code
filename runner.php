@@ -9,5 +9,6 @@ $input = new TxtInput(__DIR__ . '\tests\fixtures\day-1-sonar-input.txt', 'txt');
 $reader = new TxtReader($input);
 $sonar = new Sonar($reader);
 
+$sonar->mergeDatapointsByCount(3);
 $count = $sonar->countInclines();
 echo $count;
