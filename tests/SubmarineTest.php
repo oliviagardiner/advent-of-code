@@ -99,15 +99,27 @@ class SubmarineTest extends TestCase
         );
     }
 
-    public function testNavigateChangesPropertyCorrectly()
+    public function testNavigateChangesDepthCorrectly()
     {
         $submarine = self::getNewSubmarineWithTestInput('\fixtures\day-2-testinput.txt');
         $submarine->navigate();
         $reflectionClass = new ReflectionClass('App\Submarine');
         $depth = $reflectionClass->getProperty('depthPosition')->getValue($submarine);
         $this->assertEquals(
-            10,
+            60,
             $depth
+        );
+    }
+
+    public function testNavigateChangesHorizontalPositionCorrectly()
+    {
+        $submarine = self::getNewSubmarineWithTestInput('\fixtures\day-2-testinput.txt');
+        $submarine->navigate();
+        $reflectionClass = new ReflectionClass('App\Submarine');
+        $horiz = $reflectionClass->getProperty('horizontalPosition')->getValue($submarine);
+        $this->assertEquals(
+            15,
+            $horiz
         );
     }
 
@@ -116,7 +128,7 @@ class SubmarineTest extends TestCase
         $submarine = self::getNewSubmarineWithTestInput('\fixtures\day-2-testinput.txt');
         $submarine->navigate();
         $this->assertEquals(
-            150,
+            900,
             $submarine->calculatePosition()
         );
     }

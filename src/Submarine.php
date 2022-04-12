@@ -16,6 +16,7 @@ class Submarine
 
     private int $depthPosition = 0;
     private int $horizontalPosition = 0;
+    private int $aim = 0;
     private array $course;
 
     /**
@@ -86,11 +87,27 @@ class Submarine
     public function changePosition(string $command, int $value): void
     {
         match($command) {
-            'forward' => $this->moveHorizontally($value),
-            'down' => $this->increaseDepth($value),
-            'up' => $this->decreaseDepth($value),
+            'forward' => $this->commandForward($value),
+            'down' => $this->commandDown($value),
+            'up' => $this->commandUp($value),
             default => throw new InvalidCommandException('Command not recognized: '.$command)
         };
+    }
+
+    public function commandDown(int $value): void
+    {
+        $this->increaseAim($value);
+    }
+
+    public function commandUp(int $value): void
+    {
+        $this->decreaseAim($value);
+    }
+
+    public function commandForward(int $value): void
+    {
+        $this->moveHorizontally($value);
+        $this->increaseDepth($this->aim * $value);
     }
 
     public function increaseDepth(int $value): void
@@ -101,6 +118,16 @@ class Submarine
     public function decreaseDepth(int $value): void
     {
         $this->depthPosition -= abs($value);
+    }
+
+    public function increaseAim(int $value): void
+    {
+        $this->aim += abs($value);
+    }
+
+    public function decreaseAim(int $value): void
+    {
+        $this->aim -= abs($value);
     }
 
     public function moveHorizontally(int $value): void
