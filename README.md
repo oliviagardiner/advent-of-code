@@ -15,3 +15,5 @@ My goals for this year:
 * Day 2
   * Part 1: What do you get if you multiply your final horizontal position by your final depth? // 2187380
   * Part 2: What do you get if you multiply your final horizontal position by your final depth? // 2086357770
+Day 3
+  * Part 1: What is the power consumption of the submarine? // 4160394
