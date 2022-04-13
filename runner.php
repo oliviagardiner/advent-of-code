@@ -28,3 +28,6 @@ $txtreader->setInput($diagnosticsreport);
 $diagnostics = new Diagnostics($txtreader);
 $powercon = $diagnostics->getPowerConsumption();
 echo $powercon . PHP_EOL;
+
+$lifesupport = $diagnostics->getLifeSupportRating();
+echo $lifesupport . PHP_EOL;

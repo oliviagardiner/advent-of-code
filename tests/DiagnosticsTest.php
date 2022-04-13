@@ -103,4 +103,73 @@ class DiagnosticsTest extends TestCase
             $diagnostics->getPowerConsumption()
         );
     }
+
+    public function testLineMatchesCriteriaTrue()
+    {
+        $this->assertEquals(
+            true,
+            self::$diagnostics->lineMatchesCriteria('01001', 1, 1)
+        );
+    }
+
+    public function testLineMatchesCriteriaFalse()
+    {
+        $this->assertEquals(
+            false,
+            self::$diagnostics->lineMatchesCriteria('01001', 0, 1)
+        );
+    }
+
+    public function testFilterReportByCriteria()
+    {
+        $this->assertEquals(
+            ['11110', '10110', '10111', '10101', '11100', '10000', '11001'],
+            self::$diagnostics->filterReportByCriteria(0, 1)
+        );
+    }
+    
+    public function testComputeOxygenGenRatingBinaryReturnsCorrectBinary()
+    {
+        $diagnostics = self::getNewDiagnosticsWithTestInput('\fixtures\day-3-testinput.txt');
+        $this->assertEquals(
+            '10111',
+            $diagnostics->computeOxygenGenRatingBinary()
+        );
+    }
+
+    public function testComputeOxygenGenRatingBinaryReturnsCorrectDecimal()
+    {
+        $diagnostics = self::getNewDiagnosticsWithTestInput('\fixtures\day-3-testinput.txt');
+        $this->assertEquals(
+            23,
+            $diagnostics->computeOxygenGenRating()
+        );
+    }
+
+    public function testComputeCo2RatingBinaryReturnsCorrectBinary()
+    {
+        $diagnostics = self::getNewDiagnosticsWithTestInput('\fixtures\day-3-testinput.txt');
+        $this->assertEquals(
+            '01010',
+            $diagnostics->computeCo2RatingBinary()
+        );
+    }
+
+    public function testComputeCo2GenRatingBinaryReturnsCorrectDecimal()
+    {
+        $diagnostics = self::getNewDiagnosticsWithTestInput('\fixtures\day-3-testinput.txt');
+        $this->assertEquals(
+            10,
+            $diagnostics->computeCo2Rating()
+        );
+    }
+
+    public function testCalculatesCorrectLifeSupportRating()
+    {
+        $diagnostics = self::getNewDiagnosticsWithTestInput('\fixtures\day-3-testinput.txt');
+        $this->assertEquals(
+            230,
+            $diagnostics->getLifeSupportRating()
+        );
+    }
 }
