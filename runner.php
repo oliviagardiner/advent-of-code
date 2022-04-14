@@ -4,9 +4,12 @@ require_once __DIR__ . '\vendor\autoload.php';
 use App\Reader\SonarDataReader;
 use App\Reader\NavigationReader;
 use App\Reader\DiagnosticsReader;
+use App\Reader\BingoReader;
+use App\Reader\BingoNumberReader;
 use App\Sonar;
 use App\Submarine;
 use App\Diagnostics;
+use App\Game\Bingo\Bingo;
 
 $sonarDataReader = new SonarDataReader(__DIR__ . '\tests\fixtures\day-1-sonar-input.txt');
 $sonar = new Sonar($sonarDataReader);
@@ -28,3 +31,9 @@ echo $powercon . PHP_EOL;
 
 $lifesupport = $diagnostics->getLifeSupportRating();
 echo $lifesupport . PHP_EOL;
+
+$bingoreader = new BingoReader(__DIR__ . '\tests\fixtures\day-4-bingoinput.txt');
+$numberreader = new BingoNumberReader(__DIR__ . '\tests\fixtures\day-4-bingoinput.txt');
+$bingo = new Bingo($bingoreader, $numberreader);
+$bingo->play();
+$bingo->announceWinner();
