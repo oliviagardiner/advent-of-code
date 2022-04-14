@@ -55,15 +55,18 @@ class BingoTest extends TestCase
 
     public function testCalculateFinalScoreReturnsCorrectValue()
     {
+        $strategy = new WinStrategy();
+        self::$bingo->setStrategy($strategy);
         $this->assertEquals(
             892,
-            self::$bingo->calculateWinningScore()
+            self::$bingo->calculateFinalScore()
         );
     }
 
     public function testPlayThrowsExceptionIfStrategyNotSet()
     {
         $this->expectException(MissingStrategyException::class);
+        self::$bingo->reset();
         self::$bingo->play();
     }
 
@@ -79,7 +82,7 @@ class BingoTest extends TestCase
         );
         $this->assertEquals(
             4512,
-            self::$bingo->calculateWinningScore()
+            self::$bingo->calculateFinalScore()
         );
     }
 
@@ -105,7 +108,7 @@ class BingoTest extends TestCase
         );
         $this->assertEquals(
             1924,
-            self::$bingo->calculateLosingScore()
+            self::$bingo->calculateFinalScore()
         );
     }
 }

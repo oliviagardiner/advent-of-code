@@ -9,7 +9,7 @@ use App\Exceptions\MissingStrategyException;
 
 class Bingo implements Game
 {
-    private int $round;
+    protected int $round;
     private array $boards;
     private array $numbers;
     public int $winnerCount;
@@ -103,38 +103,19 @@ class Bingo implements Game
         return isset($this->losingBoard);
     }
 
-    public function announceWinner()
+    public function announceResult()
     {
-        if ($this->hasWinner()) {
-            $score = $this->calculateWinningScore();
-            echo "You won the game in round {$this->round}. Your final score is {$score}.".PHP_EOL;
+        if ($this->strategy->checkWinCondition($this)) {
+            $score = $this->calculateFinalScore();
+            echo "You finished the game in round {$this->round}. Your final score is {$score}.".PHP_EOL;
         } else {
-            echo "No winners, you broke the game?".PHP_EOL;
+            echo "The game is not over yet.".PHP_EOL;
         }
     }
 
-    public function accounceLoser()
+    public function calculateFinalScore(): int
     {
-        if ($this->hasLoser()) {
-            $score = $this->calculateLosingScore();
-            echo "You lost the game in round {$this->round}. Your final score is {$score}.".PHP_EOL;
-        } else {
-            echo "No losers yet.".PHP_EOL;
-        }
-    }
-
-    public function calculateWinningScore(): int
-    {
-        return $this->calculateFinalScore($this->winningBoard);
-    }
-
-    public function calculateLosingScore(): int
-    {
-        return $this->calculateFinalScore($this->losingBoard);
-    }
-
-    public function calculateFinalScore(BingoBoard $board): int
-    {
+        $board = $this->strategy->pickBoard($this);
         return $board->getUnmarkedBoardValue() * $this->drawNumber();
     }
 
@@ -157,5 +138,15 @@ class Bingo implements Game
         } catch (GameOverException $e) {
             //
         }
+    }
+
+    public function getWinningBoard(): BingoBoard
+    {
+        return $this->winningBoard;
+    }
+
+    public function getLosingBoard(): BingoBoard
+    {
+        return $this->losingBoard;
     }
 }

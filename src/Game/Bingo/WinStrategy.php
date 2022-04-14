@@ -8,4 +8,9 @@ class WinStrategy implements BingoStrategy
     {
         return $bingo->hasWinner();
     }
+
+    public function pickBoard(Bingo $bingo): BingoBoard
+    {
+        return $bingo->getWinningBoard();
+    }
 }

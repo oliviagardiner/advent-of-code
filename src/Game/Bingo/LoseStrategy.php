@@ -8,4 +8,9 @@ class LoseStrategy implements BingoStrategy
     {
         return $bingo->hasLoser();
     }
+
+    public function pickBoard(Bingo $bingo): BingoBoard
+    {
+        return $bingo->getLosingBoard();
+    }
 }
