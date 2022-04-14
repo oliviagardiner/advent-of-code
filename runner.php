@@ -1,31 +1,28 @@
 <?php
 require_once __DIR__ . '\vendor\autoload.php';
 
-use App\Input\TxtInput;
-use App\InputReader\TxtReader;
+use App\Reader\SonarDataReader;
+use App\Reader\NavigationReader;
+use App\Reader\DiagnosticsReader;
 use App\Sonar;
 use App\Submarine;
 use App\Diagnostics;
 
-$txtreader = new TxtReader();
-$sonardata = new TxtInput(__DIR__ . '\tests\fixtures\day-1-sonar-input.txt', 'txt');
-$txtreader->setInput($sonardata);
-$sonar = new Sonar($txtreader);
+$sonarDataReader = new SonarDataReader(__DIR__ . '\tests\fixtures\day-1-sonar-input.txt');
+$sonar = new Sonar($sonarDataReader);
 
 $sonar->mergeDatapointsByCount(3);
 $count = $sonar->countInclines();
 echo $count . PHP_EOL;
 
-$submarinedata = new TxtInput(__DIR__ . '\tests\fixtures\day-2-navigation-input.txt', 'txt');
-$txtreader->setInput($submarinedata);
-$submarine = new Submarine($txtreader);
+$navigationReader = new NavigationReader(__DIR__ . '\tests\fixtures\day-2-navigation-input.txt');
+$submarine = new Submarine($navigationReader);
 $submarine->navigate();
 $position = $submarine->calculatePosition();
 echo $position . PHP_EOL;
 
-$diagnosticsreport = new TxtInput(__DIR__ . '\tests\fixtures\day-3-diagnostics-input.txt', 'txt');
-$txtreader->setInput($diagnosticsreport);
-$diagnostics = new Diagnostics($txtreader);
+$diagnosticsReader = new DiagnosticsReader(__DIR__ . '\tests\fixtures\day-3-diagnostics-input.txt');
+$diagnostics = new Diagnostics($diagnosticsReader);
 $powercon = $diagnostics->getPowerConsumption();
 echo $powercon . PHP_EOL;
 

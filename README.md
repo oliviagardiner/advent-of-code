@@ -7,6 +7,11 @@ My goals for this year:
 * practice design patterns
 * practice unit testing
 
+```
+php ./runner.php
+./vendor/bin/phpunit tests
+```
+
 ---
 
 * Day 1

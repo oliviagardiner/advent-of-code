@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\InputReader\InputReaderInterface;
+use App\Reader\TxtReader;
 use App\Exceptions\NotFileException;
 use App\Exceptions\IncorrectExtensionException;
 
@@ -17,13 +17,10 @@ class Diagnostics
      * @throws IncorrectExtensionException
      */
     public function __construct(
-        private InputReaderInterface $reader
+        private TxtReader $reader
     )
     {
-        $this->report = array_map(
-            fn($line) => rtrim($line), 
-            $this->reader->readLines()
-        );
+        $this->report = $this->reader->read();
         $this->reportOriginal = $this->report;
     }
 

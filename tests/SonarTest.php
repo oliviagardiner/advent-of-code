@@ -1,7 +1,6 @@
 <?php
 
-use App\Input\TxtInput;
-use App\InputReader\TxtReader;
+use App\Reader\SonarDataReader;
 use App\Sonar;
 use App\Exceptions\NotFileException;
 use App\Exceptions\IncorrectExtensionException;
@@ -16,9 +15,7 @@ class SonarTest extends TestCase
      */
     public static function getNewSonarWithTestInput(string $path): Sonar
     {
-        $testsonardata = new TxtInput(__DIR__ . $path, 'txt');
-        $testreader = new TxtReader();
-        $testreader->setInput($testsonardata);
+        $testreader = new SonarDataReader(__DIR__ . $path);
         return new Sonar($testreader);
     }
 

@@ -1,7 +1,6 @@
 <?php
 
-use App\Input\TxtInput;
-use App\InputReader\TxtReader;
+use App\Reader\DiagnosticsReader;
 use App\Diagnostics;
 use App\Exceptions\NotFileException;
 use App\Exceptions\IncorrectExtensionException;
@@ -17,9 +16,7 @@ class DiagnosticsTest extends TestCase
      */
     public static function getNewDiagnosticsWithTestInput(string $path): Diagnostics
     {
-        $testreport = new TxtInput(__DIR__ . $path, 'txt');
-        $testreader = new TxtReader();
-        $testreader->setInput($testreport);
+        $testreader = new DiagnosticsReader(__DIR__ . $path);
         return new Diagnostics($testreader);
     }
 

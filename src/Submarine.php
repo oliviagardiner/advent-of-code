@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\InputReader\InputReaderInterface;
+use App\Reader\TxtReader;
 use App\Exceptions\NotFileException;
 use App\Exceptions\IncorrectExtensionException;
 use App\Exceptions\InvalidCommandException;
@@ -24,10 +24,10 @@ class Submarine
      * @throws IncorrectExtensionException
      */
     public function __construct(
-        private InputReaderInterface $reader
+        private TxtReader $reader
     )
     {
-        $this->course = $this->reader->readLines();
+        $this->course = $this->reader->read();
     }
 
     /**

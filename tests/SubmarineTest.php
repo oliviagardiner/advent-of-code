@@ -1,15 +1,12 @@
 <?php
 
-use App\Input\TxtInput;
-use App\InputReader\TxtReader;
+use App\Reader\NavigationReader;
 use App\Submarine;
 use App\Exceptions\NotFileException;
 use App\Exceptions\IncorrectExtensionException;
-use App\Exceptions\InvalidCommandException;
-use App\Exceptions\InvalidNavigationValueException;
 use PHPUnit\Framework\TestCase;
 
-//./vendor/bin/phpunit tests
+
 class SubmarineTest extends TestCase
 {
     public static Submarine $submarine;
@@ -21,9 +18,7 @@ class SubmarineTest extends TestCase
      */
     public static function getNewSubmarineWithTestInput(string $path): Submarine
     {
-        $testcourse = new TxtInput(__DIR__ . $path, 'txt');
-        $testreader = new TxtReader();
-        $testreader->setInput($testcourse);
+        $testreader = new NavigationReader(__DIR__ . $path);
         return new Submarine($testreader);
     }
 

@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\InputReader\InputReaderInterface;
+use App\Reader\TxtReader;
 use App\Exceptions\NotFileException;
 use App\Exceptions\IncorrectExtensionException;
 use App\Exceptions\NotEnoughDataPointsException;
@@ -18,10 +18,10 @@ class Sonar
      * @throws IncorrectExtensionException
      */
     public function __construct(
-        private InputReaderInterface $reader
+        private TxtReader $reader
     )
     {
-        $this->data = $this->reader->mapLinesToInteger();
+        $this->data = $this->reader->read();
     }
 
     public function mergeDatapointsByCount(int $count): void
