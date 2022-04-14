@@ -13,6 +13,7 @@ class BingoBoard
     private array $numberMarks;
     private array $rows;
     private array $columns;
+    private bool $won = false;
 
     public function __construct(
         array $input
@@ -43,6 +44,16 @@ class BingoBoard
         } catch (InvalidNumberException|NumberNotInBoardException $e) {
             return false;
         }
+    }
+
+    public function markWinner(): void
+    {
+        $this->won = true;
+    }
+
+    public function hasAlreadyWon(): bool
+    {
+        return $this->won;
     }
 
     /**

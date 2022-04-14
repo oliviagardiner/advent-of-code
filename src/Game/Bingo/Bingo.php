@@ -5,32 +5,64 @@ namespace App\Game\Bingo;
 use App\Game\Game;
 use App\Reader\TxtReader;
 use App\Exceptions\GameOverException;
+use App\Exceptions\MissingStrategyException;
 
 class Bingo implements Game
 {
     private int $round;
     private array $boards;
     private array $numbers;
+    public int $winnerCount;
     private BingoBoard $winningBoard;
+    private BingoBoard $losingBoard;
+    private BingoStrategy $strategy;
 
     public function __construct(
         private TxtReader $bingoReader,
         private TxtReader $numberReader
     )
     {
+        $this->reset();
+    }
+
+    public function reset()
+    {
         $this->round = 0;
-        $this->numbers = $numberReader->read();
-        $input = $bingoReader->read();
+        unset($this->boards);
+        $this->numbers = $this->numberReader->read();
+        $this->winnerCount = 0;
+        unset($this->winningBoard);
+        unset($this->losingBoard);
+        unset($this->strategy);
+
+        $input = $this->bingoReader->read();
         for ($key = 0; $key < count($input);$key += 5) {
             $this->boards[] = new BingoBoard(array_slice($input, $key, 5));
         }
     }
 
+    public function setStrategy(BingoStrategy $strategy)
+    {
+        $this->strategy = $strategy;
+    }
+
+    /**
+     * @throws MissingStrategyException
+     */
     public function play()
     {
-        while (!$this->hasWinner()) {
-            $this->checkNumberOnBoards($this->drawNumber());
-            $this->goToNextRound();
+        if (!isset($this->strategy)) {
+            throw new MissingStrategyException('You must first set your strategy.');
+        }
+        $this->checkNumberOnBoards($this->drawNumber());
+
+        while (!$this->strategy->checkWinCondition($this)) {
+            try {
+                $this->incrementRound();
+                $this->checkNumberOnBoards($this->drawNumber());
+            } catch (GameOverException $e) {
+                break;
+            }
         }
     }
 
@@ -45,11 +77,20 @@ class Bingo implements Game
          * @var BingoBoard $board
          */
         foreach ($this->boards as $board) {
-            if ($board->isWinner($number)) {
-                $this->winningBoard = $board;
-                break;
+            if ($board->hasAlreadyWon()) {
+                continue;
+            } elseif ($board->isWinner($number)) {
+                $this->setWinner($board);
             }
         }
+    }
+
+    public function setWinner(BingoBoard $board): void
+    {
+        $board->markWinner();
+        $this->winnerCount++;
+        if (!$this->hasWinner()) $this->winningBoard = $board;
+        if ($this->winnerCount === count($this->boards)) $this->losingBoard = $board;
     }
 
     public function hasWinner(): bool
@@ -57,19 +98,44 @@ class Bingo implements Game
         return isset($this->winningBoard);
     }
 
+    public function hasLoser(): bool
+    {
+        return isset($this->losingBoard);
+    }
+
     public function announceWinner()
     {
         if ($this->hasWinner()) {
-            $score = $this->calculateFinalScore();
+            $score = $this->calculateWinningScore();
             echo "You won the game in round {$this->round}. Your final score is {$score}.".PHP_EOL;
         } else {
             echo "No winners, you broke the game?".PHP_EOL;
         }
     }
 
-    public function calculateFinalScore(): int
+    public function accounceLoser()
     {
-        return $this->winningBoard->getUnmarkedBoardValue() * $this->drawNumber();
+        if ($this->hasLoser()) {
+            $score = $this->calculateLosingScore();
+            echo "You lost the game in round {$this->round}. Your final score is {$score}.".PHP_EOL;
+        } else {
+            echo "No losers yet.".PHP_EOL;
+        }
+    }
+
+    public function calculateWinningScore(): int
+    {
+        return $this->calculateFinalScore($this->winningBoard);
+    }
+
+    public function calculateLosingScore(): int
+    {
+        return $this->calculateFinalScore($this->losingBoard);
+    }
+
+    public function calculateFinalScore(BingoBoard $board): int
+    {
+        return $board->getUnmarkedBoardValue() * $this->drawNumber();
     }
 
     /**
@@ -77,19 +143,17 @@ class Bingo implements Game
      */
     public function incrementRound(): void
     {
-        if ($this->hasWinner()) {
-            throw new GameOverException('Someone already won the game.');
-        } elseif (!isset($this->numbers[$this->round + 1])) {
+        if (!isset($this->numbers[$this->round + 1])) {
             throw new GameOverException('No more rounds left.');
         }
         $this->round++;
     }
 
-    public function goToNextRound()
+    public function goToNextRound(callable $action)
     {
         try {
             $this->incrementRound();
-            $this->play();
+            call_user_func($action);
         } catch (GameOverException $e) {
             //
         }

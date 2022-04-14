@@ -25,3 +25,4 @@ php ./runner.php
   * Part 2:  What is the life support rating of the submarine? // 4125600
 * Day 4
   * What will your final score be if you choose that board? // 33348
+  * Once it wins, what would its final score be? // 8112

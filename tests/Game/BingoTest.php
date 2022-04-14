@@ -1,7 +1,9 @@
 <?php
 
-use App\Exceptions\GameOverException;
+use App\Exceptions\MissingStrategyException;
 use App\Game\Bingo\Bingo;
+use App\Game\Bingo\LoseStrategy;
+use App\Game\Bingo\WinStrategy;
 use App\Reader\BingoReader;
 use App\Reader\BingoNumberReader;
 use PHPUnit\Framework\TestCase;
@@ -51,29 +53,59 @@ class BingoTest extends TestCase
         $this->assertTrue(self::$bingo->hasWinner());
     }
 
-    public function testIncrementRoundThrowsExceptionForGameWon()
-    {
-        $this->expectException(GameOverException::class);
-        self::$bingo->incrementRound();
-    }
-
     public function testCalculateFinalScoreReturnsCorrectValue()
     {
         $this->assertEquals(
             892,
-            self::$bingo->calculateFinalScore()
+            self::$bingo->calculateWinningScore()
         );
+    }
+
+    public function testPlayThrowsExceptionIfStrategyNotSet()
+    {
+        $this->expectException(MissingStrategyException::class);
+        self::$bingo->play();
     }
 
     public function testFullGameReturnsWinningBoardValue()
     {
-        $bingoreader = new BingoReader(__DIR__ . '..\..\fixtures\day-4-testinput.txt');
-        $numberreader = new BingoNumberReader(__DIR__ . '..\..\fixtures\day-4-testinput.txt');
-        $bingo = new Bingo($bingoreader, $numberreader);
-        $bingo->play();
+        self::$bingo->reset();
+        $strategy = new WinStrategy();
+        self::$bingo->setStrategy($strategy);
+        self::$bingo->play();
+        $this->assertEquals(
+            24,
+            self::$bingo->drawNumber()
+        );
         $this->assertEquals(
             4512,
-            $bingo->calculateFinalScore()
+            self::$bingo->calculateWinningScore()
+        );
+    }
+
+    public function testResetReturnsPropertiesToDefault()
+    {
+        self::$bingo->reset();
+        $this->assertEquals(
+            7,
+            self::$bingo->drawNumber()
+        );
+        $this->assertFalse(self::$bingo->hasWinner());
+    }
+
+    public function testLostReturnsLosingBoardValue()
+    {
+        self::$bingo->reset();
+        $strategy = new LoseStrategy();
+        self::$bingo->setStrategy($strategy);
+        self::$bingo->play();
+        $this->assertEquals(
+            13,
+            self::$bingo->drawNumber()
+        );
+        $this->assertEquals(
+            1924,
+            self::$bingo->calculateLosingScore()
         );
     }
 }
