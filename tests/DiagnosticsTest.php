@@ -5,14 +5,11 @@ use App\InputReader\TxtReader;
 use App\Diagnostics;
 use App\Exceptions\NotFileException;
 use App\Exceptions\IncorrectExtensionException;
-use App\Exceptions\InvalidCommandException;
-use App\Exceptions\InvalidNavigationValueException;
 use PHPUnit\Framework\TestCase;
 
 class DiagnosticsTest extends TestCase
 {
     public static Diagnostics $diagnostics;
-    public static ReflectionClass $reflectionClass;
 
     /**
      * @throws NotFileException
