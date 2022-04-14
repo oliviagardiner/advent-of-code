@@ -26,3 +26,5 @@ php ./runner.php
 * Day 4
   * What will your final score be if you choose that board? // 33348
   * Once it wins, what would its final score be? // 8112
+* Day 5
+  * At how many points do at least two lines overlap? // 
