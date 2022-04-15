@@ -47,10 +47,6 @@ class Submarine
         }
     }
 
-    /**
-     * @throws InvalidCommandException
-     * @throws InvalidNavigationValueException
-     */
     public function extractCommand(string $line): array
     {
         $line = explode(self::COMMAND_SEPARATOR, $line);
@@ -85,6 +81,9 @@ class Submarine
         return $line;
     }
 
+     /**
+     * @throws InvalidCommandException
+     */
     public function changePosition(string $command, int $value): void
     {
         match($command) {

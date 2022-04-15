@@ -17,6 +17,10 @@ class Bingo implements Game
     private BingoBoard $losingBoard;
     private BingoStrategy $strategy;
 
+    /**
+     * @throws NotFileException
+     * @throws IncorrectExtensionException
+     */
     public function __construct(
         private TxtReader $bingoReader,
         private TxtReader $numberReader
@@ -128,16 +132,6 @@ class Bingo implements Game
             throw new GameOverException('No more rounds left.');
         }
         $this->round++;
-    }
-
-    public function goToNextRound(callable $action)
-    {
-        try {
-            $this->incrementRound();
-            call_user_func($action);
-        } catch (GameOverException $e) {
-            //
-        }
     }
 
     public function getWinningBoard(): BingoBoard
