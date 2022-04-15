@@ -12,10 +12,6 @@ class Diagnostics
     private array $report;
     private array $groups;
 
-    /**
-     * @throws NotFileException
-     * @throws IncorrectExtensionException
-     */
     public function __construct(
         private TxtReader $reader
     )

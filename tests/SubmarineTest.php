@@ -6,7 +6,6 @@ use App\Exceptions\NotFileException;
 use App\Exceptions\IncorrectExtensionException;
 use PHPUnit\Framework\TestCase;
 
-
 class SubmarineTest extends TestCase
 {
     public static Submarine $submarine;

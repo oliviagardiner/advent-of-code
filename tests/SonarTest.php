@@ -6,7 +6,6 @@ use App\Exceptions\NotFileException;
 use App\Exceptions\IncorrectExtensionException;
 use PHPUnit\Framework\TestCase;
 
-//./vendor/bin/phpunit tests
 class SonarTest extends TestCase
 {
     /**

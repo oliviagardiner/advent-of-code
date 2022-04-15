@@ -13,10 +13,6 @@ class Sonar
     private int $previousitem;
     private int $currentitem;
 
-    /**
-     * @throws NotFileException
-     * @throws IncorrectExtensionException
-     */
     public function __construct(
         private TxtReader $reader
     )

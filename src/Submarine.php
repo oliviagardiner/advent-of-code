@@ -19,10 +19,6 @@ class Submarine
     private int $aim = 0;
     private array $course;
 
-    /**
-     * @throws NotFileException
-     * @throws IncorrectExtensionException
-     */
     public function __construct(
         private TxtReader $reader
     )
