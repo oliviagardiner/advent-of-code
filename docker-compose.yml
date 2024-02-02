@@ -1,0 +1,7 @@
+version: '3'
+services:
+  app:
+    build: .
+    volumes:
+      - .:/var/app
+    command: sh -c 'composer install && tail -f /dev/null'
