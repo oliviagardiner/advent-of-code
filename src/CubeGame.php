@@ -40,7 +40,7 @@ class CubeGame extends SumProcessor
 
     private function rgbToArray(string $input): array
     {
-        if (!preg_match('/.+(red).+(green).+(blue)/', $input)) {
+        if (!preg_match('/(\d+ (blue|red|green), ){0,}\d+ (blue|red|green)/', $input)) {
             throw new InputFormatIncorrectException("Input format incorrect, expected: % red, % green, % blue and received: $input.");
         }
         $parts = explode(' ', $input);

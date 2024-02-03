@@ -4,15 +4,36 @@ namespace App\Services\LineParser;
 
 class HighestRGBParser implements LineParserInterface
 {
+    protected array $quantities = [];
+
     public function parse(string $line): string
     {
+        $this->resetQualtities();
+
+        if ($this->isInputValid($line)) {
+            $this->getHighestOfEachColor($line);
+        }
+        
         $pattern = '%s red, %s green, %s blue';
-        $quantities = [
+        return sprintf($pattern, ...array_values($this->quantities));
+    }
+
+    private function resetQualtities(): void
+    {
+        $this->quantities = [
             'red' => 0,
             'green' => 0,
             'blue' => 0
         ];
+    }
 
+    private function isInputValid(string $input): bool
+    {
+        return !empty($input) && preg_match('/Game \d{1,3}: (\d{1,3} (blue|red|green), ){0,}\d{1,3} (blue|red|green); (\d{1,3} (blue|red|green), ){0,}\d{1,3} (blue|red|green); (\d{1,3} (blue|red|green), ){0,}\d{1,3} (blue|red|green)/', $input) !== false;
+    }
+
+    private function getHighestOfEachColor(string $line): void
+    {
         list($game, $draws) = explode(':', $line, 2);
         $sets = explode(';', $draws);
 
@@ -20,11 +41,10 @@ class HighestRGBParser implements LineParserInterface
             $setPieces = explode(',', trim($set));
             foreach ($setPieces as $setPiece) {
                 list($qty, $color) = explode(' ', trim($setPiece), 2);
-                if ($qty > $quantities[$color]) {
-                    $quantities[$color] = $qty;
+                if ($qty > $this->quantities[$color]) {
+                    $this->quantities[$color] = $qty;
                 }
             }
         }
-        return sprintf($pattern, ...array_values($quantities));
     }
 }

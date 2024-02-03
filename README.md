@@ -1,5 +1,7 @@
 # advent-of-code 2023
 
+This year I added TDD to my OOP PHP approach.
+
 <https://adventofcode.com/2023>
 
 ```bash
