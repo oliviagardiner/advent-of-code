@@ -5,7 +5,7 @@ namespace App;
 use App\AbstractInputProcessor;
 use App\Exception\ParserNotSetException;
 
-abstract class SumProcessor extends AbstractInputProcessor
+class SumProcessor extends AbstractInputProcessor
 {
     protected int $sum = 0;
 
@@ -20,6 +20,4 @@ abstract class SumProcessor extends AbstractInputProcessor
     {
         $this->sum += (int)$this->parser->parse($line);
     }
-
-    
 }
