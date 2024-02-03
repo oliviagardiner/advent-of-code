@@ -1,30 +1,18 @@
-# advent-of-code-2021
+# advent-of-code 2023
 
-Solution repository for https://adventofcode.com/2021
+This year I added TDD to my OOP PHP approach.
 
-My goals for this year:
-* practice OOP
-* practice design patterns
-* practice unit testing
+<https://adventofcode.com/2023>
 
-```
-php ./runner.php
-./vendor/bin/phpunit tests
+```bash
+docker compose up -d
 ```
 
----
+In the container:
 
-* Day 1
-  * Part 1: How many measurements are larger than the previous measurement? // 1477
-  * Part 2: How many sums are larger than the previous sum? // 1523
-* Day 2
-  * Part 1: What do you get if you multiply your final horizontal position by your final depth? // 2187380
-  * Part 2: What do you get if you multiply your final horizontal position by your final depth? // 2086357770
-* Day 3
-  * Part 1: What is the power consumption of the submarine? // 4160394
-  * Part 2:  What is the life support rating of the submarine? // 4125600
-* Day 4
-  * What will your final score be if you choose that board? // 33348
-  * Once it wins, what would its final score be? // 8112
-* Day 5
-  * At how many points do at least two lines overlap? // 
+```bash
+composer test
+```
+
+* Day 1: 54605 / 55429
+* Day 2: 2105 /
