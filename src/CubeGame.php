@@ -8,12 +8,21 @@ class CubeGame extends SumProcessor
 {
     private array $bag = [];
 
+    private int $power = 0;
+
     public function getValidGameIdSum(string $bag, string $input): int
     {
         $this->bag = $this->rgbToArray($bag);
         $this->process($input);
 
         return $this->sum;
+    }
+
+    public function getGamePowerSum(string $input): int
+    {
+        $this->process($input);
+
+        return $this->power;
     }
 
     protected function processLine($line) : void
@@ -23,10 +32,16 @@ class CubeGame extends SumProcessor
         if ($this->isGameValid($gameResult)) {
             $this->sum += $this->extractId($line);
         }
+
+        $this->power += (int)$gameResult;
     }
 
     private function isGameValid(string $game): bool
     {
+        if (empty($this->bag)) {
+            return false;
+        }
+
         $gameArray = $this->rgbToArray($game);
 
         return $this->bag['red'] >= $gameArray['red'] && $this->bag['green'] >= $gameArray['green'] && $this->bag['blue'] >= $gameArray['blue'];

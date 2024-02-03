@@ -4,6 +4,7 @@ namespace App\Tests;
 
 use App\CubeGame;
 use App\Services\LineParser\HighestRGBParser;
+use App\Services\LineParser\HighestPowerRGBParser;
 use App\Services\Reader\GenericReader;
 use App\Exception\ParserNotSetException;
 use PHPUnit\Framework\TestCase;
@@ -44,6 +45,28 @@ class CubeGameTest extends TestCase
         yield 'Long input' => [
             'path' => __DIR__ . '/fixtures/day2',
             'expected' => 2105
+        ];
+    }
+
+    #[DataProvider('inputProviderPower')]
+    public function testGetTotalGamePower(string $path, int $expected): void
+    {
+        $parser = new HighestPowerRGBParser();
+        $this->sut->setParser($parser);
+        $result = $this->sut->getGamePowerSum($path);
+        $this->assertSame($expected, $result);
+    }
+
+    public static function inputProviderPower(): iterable
+    {
+        yield 'Short input' => [
+            'path' => __DIR__ . '/fixtures/day2short',
+            'expected' => 2286
+        ];
+
+        yield 'Long input' => [
+            'path' => __DIR__ . '/fixtures/day2',
+            'expected' => 72422
         ];
     }
 }

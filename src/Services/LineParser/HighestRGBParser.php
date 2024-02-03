@@ -18,7 +18,7 @@ class HighestRGBParser implements LineParserInterface
         return sprintf($pattern, ...array_values($this->quantities));
     }
 
-    private function resetQualtities(): void
+    protected function resetQualtities(): void
     {
         $this->quantities = [
             'red' => 0,
@@ -27,12 +27,12 @@ class HighestRGBParser implements LineParserInterface
         ];
     }
 
-    private function isInputValid(string $input): bool
+    protected function isInputValid(string $input): bool
     {
         return !empty($input) && preg_match('/Game \d{1,3}: (\d{1,3} (blue|red|green), ){0,}\d{1,3} (blue|red|green); (\d{1,3} (blue|red|green), ){0,}\d{1,3} (blue|red|green); (\d{1,3} (blue|red|green), ){0,}\d{1,3} (blue|red|green)/', $input) !== false;
     }
 
-    private function getHighestOfEachColor(string $line): void
+    protected function getHighestOfEachColor(string $line): void
     {
         list($game, $draws) = explode(':', $line, 2);
         $sets = explode(';', $draws);
