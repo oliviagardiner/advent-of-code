@@ -13,3 +13,4 @@ composer test
 ```
 
 * Day 1: 54605 / 55429
+* Day 2: 2105 /
