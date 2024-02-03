@@ -5,20 +5,32 @@ namespace App\Tests;
 use App\CubeGame;
 use App\Services\LineParser\HighestRGBParser;
 use App\Services\Reader\GenericReader;
+use App\Exception\ParserNotSetException;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 class CubeGameTest extends TestCase
 {
+    private CubeGame $sut;
+
+    public function setUp(): void
+    {
+        $this->sut = new CubeGame(new GenericReader);
+    }
+
+    public function testProcessThrowsExceptionIfNoParserSelected(): void
+    {
+        $this->expectException(ParserNotSetException::class);
+        $this->sut->process(__DIR__ . '/fixtures/empty');
+    }
+
     #[DataProvider('inputProvider')]
     public function testGetValidGameIdSum(string $path, int $expected): void
     {
         $bag = '12 red, 13 green, 14 blue';
-        $reader = new GenericReader();
-        $sut = new CubeGame($reader);
         $parser = new HighestRGBParser();
-        $sut->setParser($parser);
-        $result = $sut->getValidGameIdSum($bag, $path);
+        $this->sut->setParser($parser);
+        $result = $this->sut->getValidGameIdSum($bag, $path);
         $this->assertSame($expected, $result);
     }
 

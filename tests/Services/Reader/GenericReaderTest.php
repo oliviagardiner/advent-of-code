@@ -9,8 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class GenericReaderTest extends TestCase
 {
-    private string $path = __DIR__ . '/../../fixtures/day1';
-
     private GenericReader $sut;
 
     public function setUp(): void
@@ -46,7 +44,13 @@ class GenericReaderTest extends TestCase
 
     public function testReadReturnsFirstLineOfInputFile(): void
     {
-        $line = $this->sut->read($this->path);
-        $this->assertSame('twovgtprdzcjjzkq3ffsbcblnpq', $line);
+        $line = $this->sut->read(__DIR__ . '/../../fixtures/oneline');
+        $this->assertSame('testline', $line);
+    }
+
+    public function testReadReturnsEmptyStringForEmptyFile(): void
+    {
+        $line = $this->sut->read(__DIR__ . '/../../fixtures/empty');
+        $this->assertSame('', $line);
     }
 }
